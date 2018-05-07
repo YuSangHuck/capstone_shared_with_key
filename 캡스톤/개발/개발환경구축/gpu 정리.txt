@@ -1,0 +1,7 @@
+Cuda version	| VS version(MAX)	| driver version
+		|			|
+cuda8.0ga1	| 2015			| 
+cuda8.0ga2	| 2015			| 
+cuda9.0		| 2017 beta		| 388~
+cuda9.1		| 2017 			| 396
+cuda9.2		| 2017 			| 397~

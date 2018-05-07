@@ -1,0 +1,145 @@
+---------------------------- 원본 ---------------------------- 
+v resize //Mat origin
+v flip //Mat origin
+v cvtcolor (BGR to HSV) //Mat origin
+v inRange(Scalar(0, 0.23*255, 0.13*255), Scalar(50,0.68*255,255)) //Mat hand
+v erode //Mat hand
+v erode //Mat hand
+v dilate //Mat hand
+v dilate//Mat hand
+v roi 설정 //Mat hand에서 ROI설정
+convexhull
+findcontours //ROI
+drawcontours //skin color contours ROI영역만
+drawcontours //convex hull
+v rectangle //roi영역 그리기
+v circle //center of hand 그리기
+
+---------------------------- 다른순서 ---------------------------- 
+cvtcolor (BGR to GRAY) //Mat origin
+flip //Mat origin
+erode //Mat hand
+dilate //Mat hand
+erode //Mat hand
+dilate//Mat hand
+
+resize //Mat origin
+cvtcolor (BGR to HSV) //Mat origin
+inRange(Scalar(0, 0.23*255, 0.13*255), Scalar(50,0.68*255,255)) //Mat hand
+roi 설정 //Mat hand에서 ROI설정
+findcontours //ROI
+drawcontours //skin color contours ROI영역만
+drawcontours //convex hull
+rectangle //roi영역 그리기
+circle //center of hand 그리기
+
+
+---------------------------- cpu->gpu ---------------------------- 
+-resize
+ void cv::cuda::resize(InputArray src, OutputArray dst, Size dsize, double fx=0, double fy=0, int interpolation = INTER_LINEAR, Stream& stream = Stream::Null());
+ GpuMat resize;
+ resize(flip, resize, Size(), 2., 2.);
+ resize.download(frame);
+
+-flip
+ void cv::cuda::flip(InputArray src, OutputArray dst, int flipCode, Stream& stream = Stream::Null());
+ ex)Mat frame = imread(~);
+    GpuMat src,dst;
+    src.upload(frame);
+    flip(src, dst, 1)
+    dst.download(frame);
+
+
+-cvtcolor (BGR to HSV)
+ void cv::cuda::cvtColor(InputArray src, OutputArray dst, int code, int dcn = 0, Stream& stream = Stream::Null());
+ ex)Mat frame = imread(~);
+    cuda::GpuMat src,dst;
+    src.upload(frame);
+    cuda::cvtColor(src, dst, cv::COLOR_BGR2HSV);
+    dst.download(frame);
+
+-inRange(Scalar(0, 0.23*255, 0.13*255), Scalar(50,0.68*255,255))
+inRange(in, lb, ub, out)
+THRESH_TOZERO ~ THRESH_TOZERO_INV
+(r, g, b)
+180~240, 140~200, 120~180
+
+(h, s, v)
+20도~20도, 33.3퍼~25.0퍼, 70.6퍼~94.1퍼
+BGR2HSV(180도) : 28.3, 63.75~85, 180.3~240
+                 60~120, 60~85, 180~240
+
+ ex)Mat frame = imread(~);
+    cuda::GpuMat src,dst;
+    cuda::GpuMat hsv;
+    cuda::GpuMat hsv_split[3];
+    cuda::GpuMat hsv_split_threshold[3];
+    cuda::GpuMat temp;
+
+    cuda::cvtColor(imggpu, hsv, COLOR_BGR2HSV);
+
+    cuda::split(hsv, hsv_split);
+
+    cuda::threshold(hsv_split[0], hsv_split_threshold[0], 45, 90, THRESH_BINARY);
+    cuda::threshold(hsv_split[1], hsv_split_threshold[1], 100, 225, THRESH_BINARY);
+    cuda::threshold(hsv_split[2], hsv_split_threshold[2], 20, 225, THRESH_BINARY);
+
+    cuda::merge(channels_device_dest,3, threshold_device);
+    //gpu::bitwise_and(hsv_split_threshold[0], hsv_split_threshold[1],temp);
+    //gpu::bitwise_and(temp, hsv_split_threshold[2], dst);
+
+
+아래 내용은 CV_Assert( srcType == CV_8UC1 || srcType == CV_8UC4 || srcType == CV_32FC1 || srcType == CV_32FC4 );
+그레이로 바꿔야하거나 8UC3을 지원하는 cuda용 erode, dilate를 찾아야함
+-erode
+ cv::Ptr<cv::cuda::Filter> erode = cv::cuda::createMorphologyFilter(int op, int srcType, InputArray kernel, Point anchor = Point(-1, -1), int iterations = 1);
+ cv::Ptr<Filter> createMorphologyFilter(int op, int srcType, InputArray kernel, Point anchor = Point(-1, -1), int iterations = 1); 
+ @param op : operation, cv::MORP_???
+ @param srcType : cv::cuda::GpuMat.type()
+ @param kernel : Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3), cv::Point(1, 1));, 이미지 크기에 따른 효율적인 파라미터 찾을것
+ erode->apply(src, dst)
+ apply(InputArray src, OutputArray dst, Stream& stream = Stream::Null()) = 0;
+ ex)Mat frame = imread(~);
+    cuda::GpuMat src,dst;
+    src.upload(frame);
+    Mat kernel = cv::getStructuringElement(MORP_RECT, cv::Size(3, 3), cv::Point(1, 1));
+    cv::Ptr<cuda::Filter> erode = cuda::createMorphologyFilter(MORP_ERODE, src.type(), kernel);
+    erode -> apply(src, dst);
+    dst.download(frame);
+-dilate
+ erode와 동일, 단지 operation만 cv::MORP_DILATE로 바꿔줄 것
+ opening은 erosion 후 dilation
+ closing은 dilation 후 erosion
+ http://opencv-python.readthedocs.io/en/latest/doc/12.imageMorphological/imageMorphological.html
+ http://swprog.tistory.com/entry/Mathematical-morphology-%EB%AA%A8%ED%8F%B4%EB%A1%9C%EC%A7%80-%EC%97%B0%EC%82%B0
+
+-roi 설정
+ ex)Mat frame = imread(~);
+    cuda::GpuMat src,dst;
+    src.upload(frame);
+    cuda::GpuMat roi(src, Rect(100, 100, flip.cols - 100, flip.rows - 100));
+    roi.download(frame);
+
+-findcontours
+
+-convexhull(다들 알아서 짬. 공부 필요)
+v https://github.com/Stanislav-Sartasov/CUDA-Fingerprinting/tree/98d2f40e4c499a0134c5d04670d52076e89373da // 쿠다 씀
+x https://github.com/ramonsaraiva/cuda-convexhull
+ https://github.com/rvinaybharadwaj/AdaptiveRegionConstruction/tree/0d68ac933491a509f4ca5045775c157c9186aed0/GlobalMemoryVersion
+x https://github.com/scholli/gpucast // cuda 안씀
+
+ https://arxiv.org/pdf/1201.2936.pdf
+ https://arxiv.org/ftp/arxiv/papers/1508/1508.05488.pdf
+ http://gamma.cs.unc.edu/volccd/ghull/paper.pdf
+ http://www.comp.nus.edu.sg/~tants/gHull_files/gHull_Jan2012.pdf
+ 
+
+-drawcontours
+
+-rectangle
+
+-circle
+
+
+주변 환경에 따른 hsv값 조절 공식
+이미지 크기에 따른 필터링 kernel 사이즈 공식

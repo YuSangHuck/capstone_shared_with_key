@@ -1,0 +1,12 @@
+Debug
+*.pdb
+ipch
+HelloOpenCV.opensdf
+Release
+*.cd
+doxygen
+HelloOpenCV.sdf
+*.7z
+*.pdf
+
+*.suo

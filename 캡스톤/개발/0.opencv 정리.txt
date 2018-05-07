@@ -1,0 +1,105 @@
+1.기본 구조체
+ -Point // 점
+ -Size // 사이즈
+ -Rect // 사각형
+ -Scalar // 각채널의값
+ -TermCriteria // 어떤반복의 종료조건(Terminate Criteria)
+ -Mat,MatND,SparseMat // Mat, N-Dim Mat, Sparse Mat
+ -IplImage // 이미지에 대한 각종 정보가 담겨있는 구조체
+
+2.배열 조작
+ 2.1.초기화
+ -Image or ImageHeader(Create,Release,Init,Clone,Set,Get) // 헤더는 데이터를 제외한 정보만 할당, Image는 헤더+데이터에 대한 메모리 할당
+ -COI,ROI(Set,Get) // Channels & Region of interest
+ -Mat,MatHeader or MatND,MatNDHeader or SparseMat(Create,Release,Init,Clone,Set,Get)
+ -RefData,RawData
+
+ 2.2.구성요소으로의 접근(accessing elements)과 부분배열(sub-array)
+ -GetSubRect // 원본으로부터 특정 영역 crop
+ -GetRow,Rows
+ -GetCol,Cols
+ -GetDiag // 대각성분들
+ -GetSize // 사이즈
+ -GetElemType // CV_8UC1 이런거
+ -GetDims,DimSize
+ -Ptr~D // 특정 배열 요소에 대한 포인터 반환(uchar*)
+ -Get~D // 특정 배열 요소 반환(CvScalar)
+ -Set~D
+ -Iterator, NextNode
+
+ 2.3.복사와(copying) 채우기(filling)
+ -Copy
+ -Set,SetZero,SetIdentity(단위행렬)
+ -Range
+
+ 2.4.변환과 치환
+ -Reshape,ReshapeMatND
+ -Repeat
+ -Flip
+ -Split
+ -Merge
+ -MixChannels
+ -RandShuffle
+
+ 2.5.사칙연산,논리연산,비교연산
+ -LUT
+ -ConvertScale,ConvertScaleAbs
+ -Add,AddS,AddWeighted
+ -Sub,SubS,SubRS
+ -Mul
+ -Div
+ -And,AndS
+ -Or,OrS
+ -Xor,XorS
+ -Not
+ -Cmp,CmpS
+ -InRange,InRangeS
+ -Max,MaxS
+ -Min,Mins
+ -AbsDiff,AbsDiffS
+
+ 2.6.통계(statistics), 50p
+
+ 2.7.선형대수, 54p
+
+ 2.8.수학함수, 66p
+
+ 2.9.난수생성, 71p
+
+ 2.10.이산변환, 74p
+
+3.동적구조체
+ 3.1.메모리저장, 78p
+
+ 3.2.Sequence, 83p
+
+ 3.3.설정함수(Sets), 100p
+
+ 3.4.그래프, 103p
+
+ 3.5.트리함수, 113p
+
+4.그리기 함수
+ 4.1.곡선(Curve)과 형상(Shape), 116p
+
+ 4.2.문자열, 121p
+
+ 4.3.점집합(Point sets)과 윤곽(Contours), 123p
+
+5.데이터 영속성(Data Persistence)과 실행시 형 정보(RTTI[Run Time Type Information])
+ 5.1.파일저장, 127p
+
+ 5.2.데이터쓰기, 131p
+
+ 5.3.데이터읽기, 137p
+
+ 5.4.실행시 형 정보(RTTI)와 범용 함수(Generic function), 145p
+
+6.그 외의 함수(Miscellarneous functions), 148p
+
+7.에러처리(Error handling)와 시스템함수(System functino)
+ 7.1.에러 핸들링, 153p
+
+ 7.2.시스템함수, 160p
+
+8.Sample Code, 165p

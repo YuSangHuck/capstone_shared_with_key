@@ -1,0 +1,155 @@
+정석 : https://jamesbowley.co.uk/build-compile-opencv-3-4-in-windows-with-cuda-9-0-and-intel-mkl-tbb/
+        https://gist.github.com/BartG95/1ce8ba1e9c25ec3698d1
+        http://darkpgmr.tistory.com/160
+
+*개발환경 정리
+-cmake(3.11.1, x64)
+-visual(2013)
+-nvidia notebook gpu driver(385.69, x64, windows10)
+-cuda(8.0 ga2, x86_64, windows10)
+-qt(5.3, msvc2013_64_opengl, online)
+-qt-vs-addin(1.2.3)
+-python(3.5.1)
+-python-numpy(1.14.3)
+-eigen(3.3.4)
+-opencv_contrib(3.4.1)
+-opencv(3.4.1)
+
+0.cmake
+-다운로드 : https://cmake.org/download/
+-설치경로 : C:\Program Files\CMake
+
+
+1.visual studio 2013
+-다운로드 : http://nextcom.tistory.com/120
+-설치경로 : C:\Program Files (x86)\Microsoft Visual Studio 12.0
+ option은 전부 미포함
+
+
+2.nvidia notebook gpu driver
+-다운로드 : https://www.driverscloud.com/en/services/GetInformationDriver/71203-61012/nvidia-38569-notebook-win10-64bit-international-whqlexe
+-설치경로 : default
+
+
+3.CUDA
+-다운로드 : https://developer.nvidia.com/cuda-80-ga2-download-archive
+ 본인 GPU에 맞는 버전은 https://en.wikipedia.org/wiki/CUDA#GPUs_supported 참고
+-설치경로 : default
+
+
+4.qt
+http://skippy.tistory.com/4
+http://sacstory.tistory.com/entry/Q%E3%85%855-Qt5-%EC%84%A4%EC%B9%98-%EB%B0%8F-Visual-Studio-2013-%EC%97%B0%EB%8F%99%ED%95%98%EA%B8%B0
+-다운로드 : https://www.qt.io/download-qt-installer?hsCtaTracking=9f6a2170-a938-42df-a8e2-a9f0b1d6cdce%7C6cb0de4f-9bb5-4778-ab02-bfb62735f3e5
+-설치경로 : C:\Qt
+-vcredist 권한문제 발생
+ 해결방법은 net user administrator /active:yes 해서 administrator로 login해서 install
+ https://www.google.co.kr/search?biw=958&bih=905&ei=XRjjWsXcAYT28QXR5JKICA&q=qt.tools.vcredist+failed+to+start&oq=qt.tools.vcredist+failed+to+start&gs_l=psy-ab.3...17915.22144.0.22512.15.15.0.0.0.0.340.1805.0j8j2j1.11.0....0...1c.1j4.64.psy-ab..4.7.1270...33i160k1j33i21k1.0.yBkSmVutyaU
+-환경변수 추가
+opencv build할때 WITH_QT를 위해 QT_PATH에 bin 폴더 모두 넣고 path에 %QT_PATH%
+
+
+5.qt-vs-addin
+-다운로드 : https://download.qt.io/official_releases/vsaddin/
+-설치경로 : C:\Program Files (x86)\Digia\Qt5VSAddin
+-install 하고 add-in 설치했는데 빌드하니 x86과 64가 충돌.
+ visual studio platform 64비트로 바꾸고 프로젝트의 qt property에서 version 설정
+ 은누가 올린거 참고
+
+cf)Qt와 OpenCV를 같이 쓰는 2가지 방법
+-qt creator에서 쓰려면 프로젝트파일(.pro)에 opencv경로추가
+ https://side444.wordpress.com/2013/09/06/qt%EC%97%90-opencv-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0/
+ https://www.slideshare.net/dojeongchan/qt-creator-opencv
+-visual에서는 어떻게?..
+ visual studio 버전에 맞게 설치하고 vs-addin 설치하면 됨.
+
+
+6.python 3.5.1 설치
+-다운로드 : 공식홈페이지
+-설치경로 : C:\Program Files\Python\Python35
+-실행시켜서 install하고
+-numpy 패키지 설치
+ cmd에서 pip install numpy
+
+
+7.OpenCV 빌드
+-다운로드
+ https://github.com/opencv/opencv/tree/3.4.1
+ https://github.com/opencv/opencv_contrib/tree/3.4.1
+ http://eigen.tuxfamily.org/index.php?title=Main_Page
+ https://www.python.org/downloads/release/python-351/
+ pip install numpy
+-설치경로
+ C:\OpenCV\OpenCV_341\source\opencv-3.4.1
+ C:\OpenCV\OpenCV_341\source\opencv_contrib-3.4.1
+ C:\OpenCV\OpenCV_341\source\eigen-3.3.4
+ 
+-build 경로
+ C:\OpenCV\OpenCV_341\build
+
+-체크
+ WITH_CUDA
+ WITH_EIGEN
+ WITH_QT // Qt를 이용한 함수 몇개 추가 // https://docs.opencv.org/3.0-beta/modules/highgui/doc/highgui.html // .cmake 파일에 매개변수 COPY_ONLY 잘못넘긴거 COPYONLY로 수정 // cvv는 체크해제, 이는 좋은 기능이나 나중에 시간되면 빌드
+ OPENCV_ENABLE_NONFREE
+ OPENCV_EXTRA_MODULES_PATH
+ BUILD_opencv_world // 이건 마지막 configure에 체크(시간이 개오래걸림)
+
+-체크해제
+ WITH_TBB // tbb 없어도 ms-concurrency있고, 배포할때 tbb.dll도 배포해야하므로 삭제 // http://kkokkal.tistory.com/1301
+ BUILD_EXAMPLES
+ BUILD_PERF_TESTS
+ BUILD_TESTS
+ BUILD_DOCS
+ BUILD_opencv_python_bindings_generator
+ BUILD_opencv_python3
+ BUILD_opencv_java_bindings_generator
+ BUILD_JAVA
+ BUILD_PACKAGE
+ BUILD_opencv_ts
+ WITH_1394
+ WITH_GSTREAMER
+ WITH_LAPACK
+ WITH_MATLAB
+ WITH_VTK
+
+-MSB3073문제 발생
+visual studio의 권한이 없어서 문제라 함
+해결방법은 
+https://www.google.co.kr/search?ei=GRjjWvHCHYv58gWch7CICw&q=opencv+msvc+msb3073&oq=opencv+msvc+msb3073&gs_l=psy-ab.3...2309.2560.0.2813.4.4.0.0.0.0.182.336.0j2.2.0....0...1c.1.64.psy-ab..3.0.0....0.51Xo7YwJzgI
+
+-아니다 다 피해갈 수 있다.
+ALL_BUILD를 Debug,Release모드로 빌드하고(헤더,라이브러리가 흩어져있음)
+INSTALL만을 빌드하면 됨(헤더,라이브러리를 build/install 폴더에 모아줌)
+왜냐면 코딩할때 lib,header파일이 필요하므로
+
+-in Visual studio
+ 1.build platform
+  프로젝트 만틀고 Build/Configuration Manager
+  아래 목록중 해당되는 프로젝트의 플랫폼을 x64로 변경
+  새로만들기 -> 플랫폼:x64, 복사설정:Win32, 새로운플랫폼 체크해제
+  x64로 설정후 Project property/Configuration Properties/Linker/Advanced/Target Machine에서 x64확인
+
+ 2.Project property
+  -환경변수
+   1.OPENCV_341 : C:\OpenCV\build(빌드경로)
+   2.path -> %OPENCV_341%\x64\vc12\bin;
+  -Configuration 변경
+   Configuration을 All configuration으로 변경
+  -Include Dir -> %(OPENCV_341)\include
+  -Library Dir -> %(OPENCV_341)\x64\vc12\lib
+  -해당 dll 파일을 프로젝트 폴더에 추가 후 추가한 파일 링커에 추가 종속성에 입력
+   이건 환경변수 설정해주면 된다는데 재부팅 후 확인 필요
+   ㅇㅇ 환경변수 해주면됨.
+
+#pragma comment(lib, "*.lib")
+실행파일 배포시 dll과 같은 path에 있어야 함.
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+그래픽 드라이버재설치시 삭제 후 설치해야됨.
+삭제 : DDU 이용, http://prolite.tistory.com/1099 참조
+설체 : 본인 그래픽 카드에 맞는 드라이버 설치
+
+

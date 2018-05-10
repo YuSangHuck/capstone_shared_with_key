@@ -1,0 +1,14 @@
+1.과제정리
+ -웹캠 코덱과 속도 상관관계 알아보기
+ -빌드 파일에 따라서 qt유무에 따른 imshow 결과 볼것
+
+
+2.캡스톤 해결방안 고민
+3.
+
+
+https://docs.opencv.org/3.4.1/d1/d1b/group__core__hal__interface.html#ga81df635441b21f532fdace401e04f588
+https://www.google.co.kr/search?q=opencv+cuda+roi&oq=cuda+roi&aqs=chrome.1.69i57j0l2.3793j0j7&sourceid=chrome&ie=UTF-8
+http://answers.opencv.org/question/22062/bug-with-gpumatgpumatconst-gpumat-m-rect-roi/
+https://github.com/mompes/CUDA-dilation-and-erosion-filters
+https://github.com/opencv/opencv/blob/master/modules/cudafilters/src/filtering.cpp#L558

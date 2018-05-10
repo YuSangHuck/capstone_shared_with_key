@@ -1,0 +1,21 @@
+[1]J. A. Zondag, T. Gritti, and V. Jeanne, ¡°Practicalstudy on real-time hand detection,¡± in Proc. 2009 3rd International Conference on Affective Computing and Intelligent Interaction and Workshops, pp. 1?8, 2009
+
+[2]J. Zaletelj, J. Perhavc, and J. Tasic, ¡°Vision-based human-computer interface using hand gestures,¡±Image Analysis for Multimedia Interactive Services,WIAMIS'07. Eighth International Workshop on, pp. 41?41, Jun. 2007.
+
+[3]J. Wen and Y. Zhan, ¡°Vision-based two hand detection and tracking,¡± in Proc. 2nd International Conference on Interaction Sciences Information Technology, Culture and Human - ICIS, pp. 1253? 1258, 2009.
+
+[4]P. K. Pisharady, P. Vadakkepat, and A. P. Loh, ¡°Attention based detection and recognition of hand postures against complex backgrounds,¡± International Journal of Computer Vision, vol. 101, no. 3, pp. 403?419, Aug. 2012.
+
+[5]Y. Y. Pang, N. A. Ismail, and P. L. S. Gilbert, ¡°A real time vision-based hand gesture interaction,¡± in Proc. 2010 Fourth Asia International Conference on Mathematical/Analytical Modelling and Computer Simulation, pp. 237?242, 2010
+
+[6]J. Wen and Y. Zhan, ¡°Vision-based two hand detection and tracking,¡± in Proc. 2nd International Conference on Interaction Sciences Information Technology, Culture
+
+[7]Y. Fang, K. Wang, J. Cheng, and H. Lu, ¡°A real-time hand gesture recognition method,¡± in Proc. IEEE International Confere
+
+[8]M. Kolsch and M. Turk, ¡°Robust hand detection.,¡± in Proc. IEEE International Conference on Automatic Face and Gesture Recognition, 2004.
+
+[9]C. Wang and K. Wang, ¡°Hand posture recognition using Adaboost with SIFT for human robot interaction,¡±in Recent progress in robotics: viable robotic service to human. Springer Berlin Heidelberg, pp. 317-329, 2008.
+
+[10]S. Y. Cheng and M. M. Trivedi, ¡°Vision-based infotainment user determination by hand recognition for driver assistance,¡± IEEE Transactions on Intelligent Transportation Systems, vol. 11, no. 3, pp. 759?764, Sep. 2010.
+
+[12]Y. Zhao, Z. Song, and X. Wu, ¡°Hand detection using multi-resolution HOG features,¡± in Proc. IEEE International Conference on Robotics and Biomimetics, pp. 1715?1720, Dec. 2012.
